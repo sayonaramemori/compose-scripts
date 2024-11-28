@@ -1,0 +1,35 @@
+name: myfirst_app
+
+services:
+  foo:
+    container_name: HelloWorld
+    image: busybox
+    command: echo "I'm running ${COMPOSE_PROJECT_NAME}"
+
+  mysql:
+    restart: always
+    container_name: MysqlComposed
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: loverust1900
+
+  # The redis conf is need in the specific volume
+  redis:
+    restart: always
+    container_name: RedisComposed
+    image: redis:7.4-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+volumes:
+  redis:
+    external: true
+  mysql:
+    external: true
